@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traditional Building Costs Calculator</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.7.0/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
+ 
+    <!-- Esto funciono, pero sale descotejado
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js" ></script> -->
+
+ 
+    <!-- <script src="https://unpkg.com/vue-html-to-paper/build/vue-html-to-paper.js" ></script> -->
+    
+
+</head>
+<body>
+     <!-- example of injection point where you write your app template -->
+     <div id="q-app">
+        <div class="container" ref="container" id="container">
+            <div class="text-h3 q-mt-xl q-mb-md">Traditional Building Costs Calculator</div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <q-img
+                        src="../img/comparison_floor_plan.png"
+                        spinner-color="white"
+                        style="width: 100%"
+                        />
+                </div>
+
+                <div class="col-12 col-md-6 q-pa-md text-body1 flex flex-center justify-center">                    
+                    <div>
+                        <p>You have heard us say that concrete printing is 70% faster and 1/3rd the cost, but compared to what?</p>
+
+                        <p></p>We can make outlandish claims, but until you understand how to compare the cost savings of concrete printing to traditional practices, you will never make sense of it all. This is the primary reason we cant meet with customers that are unable to provide the information below from the actual past project. People get excited, people want to know more, but in the end it's meaningless unless they have the knowledge and numbers to make accurate comparisons. </p>
+
+                        <p>Complete the worksheet below and you will have a better idea of where you will save. You will see the material and labor savings, but don't forget the other savings that aren't listed such as overall construction time, interest on construction loans, management to coordinate all subs, construction delays due to Sub failures to start and finish when they should. One sub failure can result in weeks of project delays. These are real costs that effect the profitability of every job. Only you know the true saving.</p>
+                    </div>                   
+                </div>
+            </div>
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">GENERAL STRUCTURE SPEC</div>
+                    </q-card-section>
+              
+                    <q-card-section class="bg-teal text-white q-pt-none">
+                        <p style="padding-left: 30px">For the purpose of this calculator we are not considering basements and multi story.The Printer is capable of both, but to keep things simple, lets start off with a single story
+                        </p>
+                    </q-card-section>    
+                    
+                    <q-card-section class="q-pt-20">
+                        <div class="row">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 90px;">
+                                Square Ft
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="square_ft" type="number" input-class="text-center" >
+                                    <template v-slot:after>
+                                        sf
+                                    </template>
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <q-input outlined dense v-model="square_ttl" type="number" input-class="text-center" >
+                                    <template v-slot:after>
+                                        Ttl
+                                    </template>
+                                </q-input>
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-mt-20" style="padding-left: 90px; padding-right: 20;">
+                                Exterior Walls Linear Ft
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="exterior_walls_linear_ft" type="number" input-class="text-center" >
+                                    <template v-slot:after>
+                                        ft
+                                    </template>
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <q-input outlined dense filled v-model="exterior_walls_linear_in" type="number" input-class="text-center" readonly >
+                                    <template v-slot:after>
+                                        in
+                                    </template>
+                                </q-input>
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-mt-20" style="padding-left: 90px; padding-right: 20;">
+                                Interior Walls Linear Ft
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="interior_walls_linear_ft" type="number" input-class="text-center" >
+                                    <template v-slot:after>
+                                        ft
+                                    </template>
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <q-input outlined dense filled v-model="interior_walls_linear_in" type="number" input-class="text-center" readonly >
+                                    <template v-slot:after>
+                                        in
+                                    </template>
+                                </q-input>
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-mt-20" style="padding-left: 90px; padding-right: 20;">
+                                Wall Height
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="wall_height_ft" type="number" input-class="text-center" >
+                                    <template v-slot:after>
+                                        ft
+                                    </template>
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <q-input outlined dense filled v-model="wall_height_in" type="number" input-class="text-center" readonly >
+                                    <template v-slot:after>
+                                        in
+                                    </template>
+                                </q-input>
+                            </div>
+                        </div>
+                        
+                    </q-card-section>
+                    
+                  </q-card>
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">FOOTING FORMING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <!-- <q-card-section style="max-width: 100px;"> -->
+                                    <q-img      
+                                        style="width: 100%;"                                 
+                                        src="../img/footing_forming.png"
+                                        />
+                                <!-- </q-card-section>                                 -->
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FOOTING FORMING (The printer is able to print forms for footings) The layout and forming for footings and stem walls is very time consuming. Lots of lumber, diesel, stakes and labor that is no longer necessary. Simply level the area, level 4 corners of your printer and PRINT...
+                                </q-card-section>
+                            </div>                     
+                         </div>
+                    </q-card-section> 
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Footings Total LF
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="footings_total_lf" type="number" input-class="text-center" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div class="row q-pt-md">
+                        
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Footings Average Height
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="footings_average_height" type="number" input-class="text-center" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Footings Average Width
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="footings_average_width" type="number" input-class="text-center" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material Cost
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor Cost
+                            </div>
+                            <div class="col-12 col-md-4 text-left">
+                              <p style="padding-left: 100px;" >Total</p>  
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Forming Cost
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="forming_material_cost" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="forming_labor_cost" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Rebar Cost
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="rebar_material_cost" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="rebar_labor_cost" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <q-input outlined dense v-model="forming_total" type="number" 
+                                    input-class="text-center"  prefix="$" readonly mask="#.##" fill-mask="0" filled >                                    
+                                </q-input>
+                                
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-right">
+                                Days Allotted
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <q-input outlined dense v-model="forming_days_allotted" type="number" input-class="text-center"  >                                    
+                                </q-input>
+                            </div>
+                        </div>
+
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">FOOTING BACKFILL</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <!-- <q-card-section style="max-width: 100px;"> -->
+                                    <q-img      
+                                        style="width: 100%;"                                 
+                                        src="../img/footing_backfill.png"
+                                        />
+                                <!-- </q-card-section>                                 -->
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FOOTING BACKFILLING (It's good to know the labor required for backfilling as this will soon be an optional feature) No need for pump truck and finishing crews. The printer prints the forms, so it is just as capable of backfilling.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section> 
+                    <q-card-section class="q-pt-20">
+                        <div class="row">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Total Yards
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="backfill_total_yards" type="number" input-class="text-center" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div class="row q-pt-md">
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left">
+                              Rentals 
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">Labor</div>
+                            <div class="col-12 col-md-4 text-left">
+                              Pump or Truck
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Backfilling Forms
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                <q-input outlined dense v-model="backfilling_forms_labor" type="number" input-class="text-center" prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 text-left">
+                                <q-input outlined dense v-model="backfilling_forms_pump" type="number" input-class="text-center" prefix="$" />
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="backfilling_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="backfilling_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">FOOTING FORMS STRIPPING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <!-- <q-card-section style="max-width: 100px;"> -->
+                                    <q-img      
+                                        style="width: 100%;"                                 
+                                        src="../img/footing_forms_stripping.png"
+                                        />
+                                <!-- </q-card-section>                                 -->
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FOOTING STRIPPING (Forms do not need to be stripped when printed) Perfect level and square forms are printed right from the computer. Grading is also easier as the only real important level is the 4 corners of the printer. When the corners are leveled, the print will be level.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Forms Stripping
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">                                
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="forms_stripping_labor" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Cost of damaged lumber
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"> 
+                                <q-input outlined dense v-model="stripping_cost_damaged_lumber" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>                               
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-4"></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="footing_forms_stripping_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="stripping_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+
+                    </q-card-section>
+
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">SLAB FORMING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/slab_forming.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    SLAB FORMING (The printer can print the forms for slab) The slab layout and forming is critical to all other subs on the job. If a mistake is made at this point of the project, nothing else is square and all other subs suffer. With the Concrete printer, the house is square every time.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Slab Forming</div>
+                            <div class="col-12 col-md-2 q-pr-md">  
+                                <q-input outlined dense v-model="slab_forming_material" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="slab_forming_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-4" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_forming_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_forming_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+
+                    </q-card-section>  
+                    
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">SLAB POUR</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/slab_pour.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    SLAB POUR (It's good to know the labor required for backfilling as this will soon be an optional feature) No need for expensive pump trucks, and large crews.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Total Yards of Backfil
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="slab_pour_total_yards" type="number" input-class="text-center" >
+                                    <template v-slot:after>
+                                        Yrds
+                                    </template>
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div class="row q-pt-md">
+                        
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Pour Depth
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="slab_pour_depth" type="number" input-class="text-center" >   
+                                    <template v-slot:after>
+                                        Inches
+                                    </template>                                 
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Total Square Foot
+                            </div>
+                            <div class="col-12 col-md-4 q-pr-md">
+                                <q-input outlined dense v-model="slab_pour_total_square_foot" type="number" input-class="text-center" >  
+                                    <template v-slot:after>
+                                        SF
+                                    </template>                                  
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4"></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left">
+                              Rentals 
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">Labor</div>
+                            <div class="col-12 col-md-4 text-left">
+                              Pump or Truck
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Slab Pouring
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                <q-input outlined dense v-model="slab_pouring_labor" type="number" input-class="text-center" prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 text-left">
+                                <q-input outlined dense v-model="slab_pouring_pump" type="number" input-class="text-center" prefix="$" />
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_pouring_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_pouring_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+
+                    </q-card-section>
+                    
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">SLAB FINISHING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/slab_finishing.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    SLAB FINISHING (Not there yet, but our printer will be finishing slabs within the next 6 to 12 months and can be ordered as an option. If you're waiting for all the options to be available before buying, you'll never buy a printer because we will never stop innovating. All upgrades will be available and are designed to be added to all of our printers.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Slab Finishing</div>
+                            <div class="col-12 col-md-3 q-pr-md">  
+                                <q-input outlined dense v-model="slab_finishing_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-3" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_finishing_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_finishing_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">SLAB FORM STRIPPING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <!-- <q-card-section style="max-width: 100px;"> -->
+                                    <q-img      
+                                        style="width: 100%;"                                 
+                                        src="../img/slab_forms_stripping.png"
+                                        />
+                                <!-- </q-card-section>                                 -->
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FORM STRIPPING (Forms do not need to be stripped when printed) No damaged forms, no labor costs, No delays in getting ready for framing
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Forms Stripping
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">                                
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="slab_forms_stripping_labor" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>
+                            </div>
+                            <div class="col-12 col-md-4">
+
+                            </div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                                Cost of damaged lumber
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"> 
+                                <q-input outlined dense v-model="slab_stripping_cost_damaged_lumber" type="number" input-class="text-center"  prefix="$" >                                    
+                                </q-input>                               
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-4"></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_forms_stripping_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="slab_stripping_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">BASEMENTS</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/basements.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    BASEMENTS We aren't considering basement right now, with our printers there is not forming, backfilling, stripping forms, forming interior walls, drywall, insulation or Taping. All of this is done by the printer. We aren't going to use these savings as part of the comparison, but know this is what the printer will do.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">FRAMING LAYOUT</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/framing_layout.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FRAMING LAYOUT (There is no need for the labor or time to do layout on slab) The printer knows where your wall are going to be. No chalk lines needed. Once the slab is poured all you have to do is hit print.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Framing Layout</div>
+                            <div class="col-12 col-md-3 q-pr-md">  
+                                <q-input outlined dense v-model="framing_layout_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-3" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="framing_layout_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="framing_layout_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">FRAMING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/framing.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FRAMING (No need for framing) No warped studs, Better fire rating, No mildew. No matter how you look at it printing a home is far better that framing a home. Faster, More accurate, just better all around.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Framing</div>
+                            <div class="col-12 col-md-2 q-pr-md">  
+                                <q-input outlined dense v-model="framing_material" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="framing_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-4" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="framing_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="framing_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+
+                    </q-card-section>  
+                    
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">ROUGH ELECTRICAL</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/rough_electrical.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    ROUGH ELECTRICAL (No need to drill studs for electrical) This is not necessary as walls can be printed that are hollow. Depending on the mix that is used, there is also no need for the rebar or solid pour exterior and bearing walls. We know the idea of exterior walls and bearing walls without rebar seems ridiculous, but its time to learn something new. Look up 20,000 psi concrete and geopolymer. It's real.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor Savings
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">ROUGH ELECTRICAL</div>
+                            <div class="col-12 col-md-3 q-pr-md">  
+                                <q-input outlined dense v-model="rough_electrical_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-3" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="rough_electrical_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="rough_electrical_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">ROUGH PLUMBING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/rough_plumbing.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    ROUGH PLUMBING (No need to drill studs for plumbing) This is necessary as walls can be printed that are hollow. Same as above. your electrical and plumbing will be less expensive.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor Savings
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Rough Plumbing</div>
+                            <div class="col-12 col-md-3 q-pr-md">  
+                                <q-input outlined dense v-model="rough_plumbing_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-3" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="rough_plumbing_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="rough_plumbing_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">DRYWALL</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/drywall.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    DRYWALL (Printed walls are finished without additive material during the print) You will still need to hang the lid, but not the walls. This goes for the basement. Just trowel the printed wall and when done its as smooth as a 3 coat drywall wall. Most countries do not wood frame at all. They build with bricks and then send a crew of mason finishers and when its done its smooth as anything.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Drywall Delivery
+                            </div>
+                            <div class="col-12 col-md-2"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Drywall Hanging</div>
+                            <div class="col-12 col-md-2 q-pr-md">  
+                                <q-input outlined dense v-model="drywall_hanging_material" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="drywall_hanging_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="drywall_hanging_delivery" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="drywall_hanging_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="drywall_hanging_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>                      
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">TAPING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/taping.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    TAPING (No need for taping as the walls are troweled smooth during printing) Some print finishes may not need to be finished if acceptable to the customer. Taping takes days for each coat to dry. Not the case with mason finishing. Within 3 hours of the walls being printed, the walls are finished
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Drywall Taping</div>
+                            <div class="col-12 col-md-2 q-pr-md">  
+                                <q-input outlined dense v-model="drywall_taping_material" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="drywall_taping_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-4" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="drywall_taping_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="drywall_taping_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>                      
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">FINISHES</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/finishes.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    FINISHES. If builders want to finish the smooth walls with a knock down broquet, orange peel or other finish, just come back the next day and spray with a hopper, top coat and trowel.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">STUCCO/SIDING</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/stucco_siding.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    STUCCO/SIDING (Exterior walls can be finished during the print to match most stucco finishes) No paper, mesh or additive material is needed. This isn't a process that is done days after framing and sheeting. The finish is done real time as the wall is printing.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Material
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor
+                            </div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Stucco</div>
+                            <div class="col-12 col-md-2 q-pr-md">  
+                                <q-input outlined dense v-model="stucco_material" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md">
+                                <q-input outlined dense v-model="stucco_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-4" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="stucco_total" type="number" input-class="text-center" filled readonly prefix="$"  
+                                    mask="#.##" fill-mask="0" reverse-fill-mask />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="stucco_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>                      
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">INSULATION</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/insulation.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    INSULATION (Printers can be purchased with an insulation option that will blow insulation after every 12" of print) You can have any R Factor you want depending on the density you choose. A solid concrete wall has a 9R Value. If you print a hollow wall and back fill with fiberglass, polystyrene or cellulose you can achieve any R value desired up to R30.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-20">
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;"></div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                                Labor Savings
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center"></div>
+                            <div class="col-12 col-md-4 text-left"></div>
+                        </div>
+
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">Insulation</div>
+                            <div class="col-12 col-md-3 q-pr-md">  
+                                <q-input outlined dense v-model="insulation_labor" type="number" input-class="text-center"  prefix="$" />
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md"></div>
+                            <div class="col-12 col-md-3" ></div>
+                        </div>
+
+                        <div class="row q-pt-md">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                Total
+                            </div>
+                        </div>
+                        <div class="row q-pt-xs">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-center">                                
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="insulation_total" type="number" input-class="text-center" filled readonly prefix="$" />
+                            </div>
+                        </div>
+                        <div class="row q-pt-sm">
+                            <div class="col-12 col-md-4 q-pt-20" style="padding-left: 120px;">
+                            </div>
+                            <div class="col-12 col-md-2 q-pr-md text-center">
+                            </div>
+                            <div class="col-12 col-md-3 q-pr-md text-right">  
+                                Days Allotted                              
+                            </div>
+                            <div class="col-12 col-md-3 text-center">
+                                <q-input outlined dense v-model="insulation_days_allotted" type="number" input-class="text-center" />
+                            </div>
+                        </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="row q-mt-md">                
+                <q-card flat bordered style="width: 100%">
+                    <q-card-section class="bg-teal text-white">
+                      <div class="text-h6">TRUSSES</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                        <div class="row" >
+                            <div class="col-1 bg-teal text-white" style="max-width: 100px;" >
+                                <q-img      
+                                    style="width: 100%;"                                 
+                                    src="../img/trusses.png"
+                                    ></q-img>
+                            </div>
+                            <div class="col-11" style="border:1px solid black;">
+                                <q-card-section>
+                                    TRUSSES (Mudbots is working on a composite truss system that can be printed on site) Additionally, house plans can be modified to allow for dome roofing which can also eliminate trussing and sheeting costs. The truss system utilizes the same printer but a different mixer/pumping system. As new advances become available they will be bolt on solutions with your existing printer.
+                                </q-card-section>
+                            </div>                        
+                         </div>
+                    </q-card-section>
+                </q-card> 
+            </div>
+
+            <div class="bg-cyan">
+                <div class="row q-mt-md">  
+                    <div>
+                        <q-card flat bordered style="width: 100%">
+                            <q-card-section class="bg-light-blue-6 text-white">
+                              <div class="text-h6">TOTALS</div>
+                            </q-card-section>
+        
+                            <q-card-section>
+                                <div class="row" >                                
+                                    <div class="col-12" style="border:1px solid black;">
+                                        <q-card-section>
+                                            What we have shared is the obvious advances in construction that are possible with home printing, but this is only the beginning. We could address more, but it honestly is too much for most. Here is your costs for traditional construction. Now that you have a comparison, go the project calculator for our printer and you will see that a 70% savings was far too conservative.
+                                        </q-card-section>
+                                    </div>                        
+                                 </div>
+                            </q-card-section>
+                        </q-card>
+                    </div>
+                </div>
+
+                <table style="width: 100%;" class="q-my-lg">
+                    <tr>
+                      <th></th>
+                      <th>MATERIAL COSTS</th>
+                      <th>LABOR COSTS</th>
+                      <th>ALLOCATED DAYS</th>
+                    </tr>
+                    <tr>
+                        <td>Footing Forming</td>
+                      <td>
+                          <q-input outlined dense v-model="forming_material_cost" type="number" input-class="text-center"  prefix="$"  filled readonly >                                    
+                            </q-input>
+                        </td>
+                      <td>
+                        <q-input outlined dense v-model="forming_labor_cost" type="number" input-class="text-center"  prefix="$" filled readonly >                                    
+                        </q-input>
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="forming_days_allotted" type="number" input-class="text-center" filled readonly >                                    
+                        </q-input>
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Footing Backfill</td>
+                      <td>
+
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="backfilling_forms_labor" type="number" input-class="text-center" prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="backfilling_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Footing Stripping</td>
+                      <td>
+
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="forms_stripping_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="stripping_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Slab Forming</td>
+                      <td>
+                        <q-input outlined dense v-model="slab_forming_material" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="slab_forming_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="slab_forming_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Framing Layout</td>
+                      <td>
+                        
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="framing_layout_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="framing_layout_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Framing</td>
+                      <td>
+                        <q-input outlined dense v-model="framing_material" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="framing_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="framing_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Rough Electrical</td>
+                      <td>
+                        
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="rough_electrical_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="rough_electrical_days_allotted" type="number" input-class="text-center" filled readonly filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Rough Plumbing</td>
+                      <td>
+                        
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="rough_plumbing_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="rough_plumbing_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Drywall</td>
+                      <td>
+                        <q-input outlined dense v-model="drywall_hanging_material" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="drywall_hanging_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="drywall_hanging_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Taping</td>
+                      <td>
+                        <q-input outlined dense v-model="drywall_taping_material" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="drywall_taping_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="drywall_taping_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Stucco</td>
+                      <td>
+                        <q-input outlined dense v-model="stucco_material" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="stucco_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="stucco_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tr>
+                        <td>Insulation</td>
+                      <td>
+                        
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="insulation_labor" type="number" input-class="text-center"  prefix="$" filled readonly />
+                      </td>
+                      <td>
+                        <q-input outlined dense v-model="insulation_days_allotted" type="number" input-class="text-center" filled readonly />
+                      </td>
+                    </tr>
+                    <tfoot>
+                        <tr>
+                          <th>Total :</th>
+                          <td> 
+                              <q-input outlined dense v-model="total_material_costs" type="number" input-class="text-center" filled readonly />
+                          <td>
+                            <q-input outlined dense v-model="total_labor_costs" type="number" input-class="text-center" filled readonly />
+                          </td>
+                          <td>
+                            <q-input outlined dense v-model="total_days_allotted" type="number" input-class="text-center" filled readonly />
+                          </td>
+                        </tr>
+                    </tfoot>
+                  </table>            
+
+        </div>
+
+        <!-- <q-btn color="primary" label="Generate PDF" class="q-mt-md" @click="printFacture" /> -->
+     </div>
+
+     
+
+     <!-- Add the following at the end of your body tag -->
+     <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/quasar@2.7.0/dist/quasar.umd.prod.js"></script>     
+     
+     <script>
+
+       /*
+         Example kicking off the UI. Obviously, adapt this to your specific needs.
+         Assumes you have a <div id="q-app"></div> in your <body> above
+        */
+        const { ref, watch } = Vue
+        // import jspdf from 'jspdf'
+        // import VueHtmlToPaper from 'vue-html-to-paper';
+
+        const app = Vue.createApp({
+            setup () {
+                const container = ref(null);
+
+                const square_ft = ref(200)
+                const square_ttl = ref(null)
+                const exterior_walls_linear_ft = ref(46)
+                const exterior_walls_linear_in = ref(46 * 12)
+                const interior_walls_linear_ft = ref(43)
+                const interior_walls_linear_in = ref(43 * 12)
+                const wall_height_ft = ref(26)
+                const wall_height_in = ref(26 * 12)
+
+                const footings_total_lf = ref(33)
+                const footings_average_height = ref(342)
+                const footings_average_width = ref(644)
+                const forming_material_cost = ref(36)
+                const forming_labor_cost = ref(42)
+                const rebar_material_cost = ref(63)
+                const rebar_labor_cost = ref(75) 
+                let total =  36 + 42 + 63 + 75   
+                const forming_total = ref(total) 
+                const forming_days_allotted = ref(4)   
+                
+                const backfill_total_yards = ref(45)
+                const backfilling_forms_labor = ref(54)
+                const backfilling_forms_pump  = ref(54)
+                total = 54 + 54
+                const backfilling_total = ref(total)
+                const backfilling_days_allotted = ref(0)
+
+                const forms_stripping_labor = ref(5)                
+                const stripping_cost_damaged_lumber = ref(3)
+                total = 5 + 3
+                const footing_forms_stripping_total = ref(total)
+                const stripping_days_allotted = ref(0)
+                
+                const slab_forming_material = ref(98)
+                const slab_forming_labor = ref(9) 
+                total = 98 + 9
+                const slab_forming_total = ref(total)
+                const slab_forming_days_allotted = ref(0)
+
+                const slab_pour_total_yards = ref(55) 
+                const slab_pour_depth = ref(55)
+                const slab_pour_total_square_foot = ref(55)
+                const slab_pouring_labor = ref(0)
+                const slab_pouring_pump = ref(0)
+                const slab_pouring_total = ref(0)
+                const slab_pouring_days_allotted = ref(0)
+
+                const slab_finishing_labor = ref(0)
+                const slab_finishing_total = ref(0)
+                const slab_finishing_days_allotted = ref(0)
+
+                const slab_forms_stripping_labor = ref(0)
+                const slab_stripping_cost_damaged_lumber = ref(0)
+                const slab_forms_stripping_total = ref(0)
+                const slab_stripping_days_allotted = ref(0)
+
+                const framing_layout_labor = ref(9)
+                const framing_layout_total = ref(9)
+                const framing_layout_days_allotted = ref(0)
+
+                const framing_material = ref(0)
+                const framing_labor = ref(0)
+                const framing_total = ref(0)
+                const framing_days_allotted = ref(0)
+
+                const rough_electrical_labor = ref(0)
+                const rough_electrical_total = ref(0)
+                const rough_electrical_days_allotted = ref(0)
+                
+                const rough_plumbing_labor = ref(0)
+                const rough_plumbing_total = ref(0)
+                const rough_plumbing_days_allotted = ref(0)
+
+                const drywall_hanging_material = ref(0)
+                const drywall_hanging_labor = ref(0)
+                const drywall_hanging_delivery = ref(0)
+                const drywall_hanging_total = ref(0)
+                const drywall_hanging_days_allotted = ref(0)
+
+                const drywall_taping_material = ref(0)
+                const drywall_taping_labor = ref(0)
+                const drywall_taping_total = ref(0)
+                const drywall_taping_days_allotted = ref(0)
+
+                const stucco_material = ref(0)
+                const stucco_labor = ref(0)
+                const stucco_total = ref(0)
+                const stucco_days_allotted = ref(0)
+
+                const insulation_labor = ref(0)
+                const insulation_total = ref(0)
+                const insulation_days_allotted = ref(0)
+
+                const total_material_costs = ref(0)
+                const total_labor_costs = ref(0)
+                const total_days_allotted = ref(0)
+
+                total_material_costs.value = Number(forming_material_cost.value) + Number(slab_forming_material.value) + Number(framing_material.value) + 
+                                                    Number(drywall_hanging_material.value) + Number(drywall_taping_material.value) + Number(stucco_material.value)
+
+                total_labor_costs.value = Number(forming_labor_cost.value) + Number(rebar_labor_cost.value) +  Number(backfilling_forms_labor.value) + 
+                                            Number(forms_stripping_labor.value) + Number(slab_forming_labor.value) + Number(slab_pouring_labor.value) +
+                                            Number(slab_finishing_labor.value) + Number(slab_forms_stripping_labor.value) + Number(framing_layout_labor.value) +
+                                            Number(framing_labor.value) + Number(rough_electrical_labor.value) + Number(rough_plumbing_labor.value) +
+                                            Number(drywall_hanging_labor.value) +  Number(drywall_taping_labor.value) + Number(stucco_labor.value) +
+                                            Number(insulation_labor.value)
+
+                total_days_allotted.value = Number(forming_days_allotted.value) + Number(slab_pouring_days_allotted.value) + Number(slab_finishing_days_allotted.value) +
+                                            Number(slab_stripping_days_allotted.value) + Number(framing_layout_days_allotted.value) + Number(framing_days_allotted.value) +
+                                            Number(rough_electrical_days_allotted.value) + Number(rough_plumbing_days_allotted.value) + Number(drywall_hanging_days_allotted.value) +
+                                            Number(drywall_taping_days_allotted.value) + Number(stucco_days_allotted.value) + Number(insulation_days_allotted.value) +
+                                            Number(total_days_allotted.value)
+
+                watch([exterior_walls_linear_ft, interior_walls_linear_ft, wall_height_ft, 
+                forming_material_cost, forming_labor_cost, rebar_material_cost, rebar_labor_cost,
+                backfilling_forms_labor, backfilling_forms_pump,
+                forms_stripping_labor,stripping_cost_damaged_lumber,
+                slab_forming_material,slab_forming_labor,
+                slab_pouring_labor,slab_pouring_pump,
+                slab_finishing_labor,
+                slab_forms_stripping_labor,slab_stripping_cost_damaged_lumber,
+                framing_layout_labor,
+                framing_material,framing_labor,
+                rough_electrical_labor,
+                rough_plumbing_labor,
+                drywall_hanging_material,drywall_hanging_labor,drywall_hanging_delivery,
+                drywall_taping_material,drywall_taping_labor,
+                stucco_material,stucco_labor,
+                insulation_labor,], (currentValue, oldValue) => {  
+
+                    exterior_walls_linear_in.value = Number(exterior_walls_linear_ft.value) * 12
+                    interior_walls_linear_in.value = Number(interior_walls_linear_ft.value) * 12
+                    wall_height_in.value = Number(wall_height_ft.value) * 12
+
+                    forming_total.value = Number(forming_material_cost.value) + Number(forming_labor_cost.value) + 
+                                            Number(rebar_material_cost.value) + Number(rebar_labor_cost.value)
+
+                    backfilling_total.value = Number(backfilling_forms_labor.value) + Number(backfilling_forms_pump.value)
+
+                    footing_forms_stripping_total.value = Number(forms_stripping_labor.value) + Number(stripping_cost_damaged_lumber.value)
+
+                    slab_forming_total.value = Number(slab_forming_material.value) + Number(slab_forming_labor.value)
+
+                    slab_pouring_total.value = Number(slab_pouring_labor.value) + Number(slab_pouring_pump.value)
+
+                    slab_finishing_total.value = Number(slab_finishing_labor.value)
+
+                    slab_forms_stripping_total.value = Number(slab_forms_stripping_labor.value) + Number(slab_stripping_cost_damaged_lumber.value)
+
+                    framing_layout_total.value = Number(framing_layout_labor.value)
+
+                    framing_total.value = Number(framing_material.value) + Number(framing_labor.value)
+
+                    rough_electrical_total.value = Number(rough_electrical_labor.value)
+
+                    rough_plumbing_total.value = Number(rough_plumbing_labor.value)
+
+                    drywall_hanging_total.value = Number(drywall_hanging_material.value) + Number(drywall_hanging_labor.value) + Number(drywall_hanging_delivery.value)
+
+                    drywall_taping_total.value = Number(drywall_taping_material.value) + Number(drywall_taping_labor.value)
+
+                    stucco_total.value = Number(stucco_material.value) + Number(stucco_labor.value)
+
+                    insulation_total.value = Number(insulation_labor.value)
+
+                    total_material_costs.value = Number(forming_material_cost.value) + Number(slab_forming_material.value) + Number(framing_material.value) + 
+                                                    Number(drywall_hanging_material.value) + Number(drywall_taping_material.value) + Number(stucco_material.value)
+
+                    total_labor_costs.value = Number(forming_labor_cost.value) + Number(rebar_labor_cost.value) +  Number(backfilling_forms_labor.value) + 
+                                                Number(forms_stripping_labor.value) + Number(slab_forming_labor.value) + Number(slab_pouring_labor.value) +
+                                                Number(slab_finishing_labor.value) + Number(slab_forms_stripping_labor.value) + Number(framing_layout_labor.value) +
+                                                Number(framing_labor.value) + Number(rough_electrical_labor.value) + Number(rough_plumbing_labor.value) +
+                                                Number(drywall_hanging_labor.value) +  Number(drywall_taping_labor.value) + Number(stucco_labor.value) +
+                                                Number(insulation_labor.value)
+
+                    total_days_allotted.value = Number(forming_days_allotted.value) + Number(slab_pouring_days_allotted.value) + Number(slab_finishing_days_allotted.value) +
+                                            Number(slab_stripping_days_allotted.value) + Number(framing_layout_days_allotted.value) + Number(framing_days_allotted.value) +
+                                            Number(rough_electrical_days_allotted.value) + Number(rough_plumbing_days_allotted.value) + Number(drywall_hanging_days_allotted.value) +
+                                            Number(drywall_taping_days_allotted.value) + Number(stucco_days_allotted.value) + Number(insulation_days_allotted.value) +
+                                            Number(total_days_allotted.value)
+                }) 
+                
+                
+            
+                // const printFacture = () => {
+                //     var pdf = new jsPDF();
+                //     var element = document.getElementById('container')   
+                //     console.log(element)                 
+                //     var width= element.style.width
+                //     var height = element.style.height
+                //     html2canvas(element).then(canvas => {
+                //         var image = canvas.toDataURL('image/png')
+                //         pdf.addImage(image, 'JPEG', 15, 40, width, height)
+                //         pdf.save('facture.pdf')
+                //     })
+                // }
+
+                // const printFacture = () => {
+                //     // console.log(container.value)
+                //     // var doc = new jsPDF('p', 'pt', 'A4');
+                //     const doc = new jsPDF("p", "in", "letter");
+                //         margins = {
+                //             top: 80,
+                //             bottom: 60,
+                //             left: 40,
+                //             width: 522
+                //         };
+                    
+                //     doc.fromHTML(container.value, margins.left, margins.top,{
+                //         'width' : margins.width
+                //     });
+                    
+                //     doc.save('test.pdf');
+                //     }
+
+                // //Esta funciono, pero no sale cotejados
+                // function printFacture () {
+                //     var doc = new jsPDF();
+                //     doc.fromHTML(document.getElementById("container"), 
+                //     15,
+                //     15, 
+                //     {'width': 170},
+                //     function() 
+                //     {
+                //     doc.save("PDF_Documet.pdf");
+                //     });
+                // }
+
+                function printFacture() {
+                    const doc = document.getElementById("container")
+                    html2canvas(doc, {
+                        allowTaint: true
+                    }).then(function (canvas) {
+                        var imgData = canvas.toDataURL('image/jpeg, 1.0');
+                        var pdf = new jspdf.jsPDF({
+                            unit: 'mm',
+                            format: 'a4',
+                            orientation: 'portrait'
+                        });
+
+                        pdf.addImage(imgData, 'jpeg', 15, 2);
+                        pdf.save('test.pdf');
+                    });
+                }
+
+                // function printFacture() {
+                //     htmlToPaper('container');
+                // }
+            
+
+           return {
+            square_ft,
+            square_ttl,
+            exterior_walls_linear_ft,
+            exterior_walls_linear_in,
+            interior_walls_linear_ft,
+            interior_walls_linear_in,
+            wall_height_ft,
+            wall_height_in,
+            footings_total_lf,
+            footings_average_height,
+            footings_average_width,
+            forming_material_cost,
+            forming_labor_cost,
+            rebar_material_cost,
+            rebar_labor_cost,
+            forming_total,
+            forming_days_allotted,
+            backfill_total_yards,
+            backfilling_forms_labor,
+            backfilling_forms_pump,
+            backfilling_total,
+            backfilling_days_allotted,
+
+            forms_stripping_labor,
+            stripping_cost_damaged_lumber,
+            footing_forms_stripping_total,
+            stripping_days_allotted,
+
+            slab_forming_material,
+            slab_forming_labor,
+            slab_forming_total,
+            slab_forming_days_allotted,
+
+            slab_pour_total_yards,
+            slab_pour_depth,
+            slab_pour_total_square_foot,
+            slab_pouring_labor,
+            slab_pouring_pump,
+            slab_pouring_total,
+            slab_pouring_days_allotted,
+
+            slab_finishing_labor,
+            slab_finishing_total,
+            slab_finishing_days_allotted,
+
+            slab_forms_stripping_labor,
+            slab_stripping_cost_damaged_lumber,
+            slab_forms_stripping_total,
+            slab_stripping_days_allotted,
+
+            framing_layout_labor,
+            framing_layout_total,
+            framing_layout_days_allotted,
+
+            framing_material,
+            framing_labor,
+            framing_total,
+            framing_days_allotted,
+
+            rough_electrical_labor,
+            rough_electrical_total,
+            rough_electrical_days_allotted,
+
+            rough_plumbing_labor,
+            rough_plumbing_total,
+            rough_plumbing_days_allotted,
+
+            drywall_hanging_material,
+            drywall_hanging_labor,
+            drywall_hanging_delivery,
+            drywall_hanging_total,
+            drywall_hanging_days_allotted,
+
+            drywall_taping_material,
+            drywall_taping_labor,
+            drywall_taping_total,
+            drywall_taping_days_allotted,
+
+            stucco_material,
+            stucco_labor,
+            stucco_total,
+            stucco_days_allotted,
+
+            insulation_labor,
+            insulation_total,
+            insulation_days_allotted,
+
+            total_material_costs,
+            total_labor_costs,
+            total_days_allotted,
+
+            container,
+            printFacture,
+
+           }
+         }
+       })
+ 
+       app.use(Quasar)
+       app.mount('#q-app')
+     </script>    
+</body>
+</html>
